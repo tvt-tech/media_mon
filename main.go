@@ -18,6 +18,7 @@ func init() {
 func main() {
 	debug := flag.Bool("d", false, "Debug")
 	list := flag.Bool("l", false, "List devices")
+	eject := flag.Bool("e", false, "Eject device")
 	flag.Parse()
 
 	if *debug {
@@ -27,6 +28,16 @@ func main() {
 
 	if *list {
 		utils.PrintDrives()
+		return
+	}
+
+	if *eject {
+		if directory := flag.Arg(0); directory != "" {
+			err := utils.EjectDrive(directory)
+			if err != nil {
+				Logger.Error(err)
+			}
+		}
 		return
 	}
 

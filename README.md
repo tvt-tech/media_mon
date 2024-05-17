@@ -28,6 +28,11 @@ List USB drives
 usb-file-filter.exe -l
 ```
 
+
+Eject drive by path 
+ ```powerhsell
+usb-file-filter.exe -e E:
+
 Run in debug mode
  ```powerhsell
 usb-file-filter.exe -d ./<dst>
