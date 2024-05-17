@@ -1,0 +1,116 @@
+package main
+
+import (
+	"log"
+	"os"
+	"time"
+
+	"github.com/StackExchange/wmi"
+	"golang.org/x/sys/windows/svc"
+	"golang.org/x/sys/windows/svc/debug"
+)
+
+var elog debug.Log
+
+type USBDriveService struct{}
+
+func init() {
+	logFile, err := os.OpenFile("C:\\path\\to\\your\\log\\USBDriveWatcherService.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatalf("Failed to open log file: %v", err)
+	}
+	log.SetOutput(logFile)
+}
+
+func (m *USBDriveService) Execute(args []string, r <-chan svc.ChangeRequest, s chan<- svc.Status) (bool, uint32) {
+	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown
+	s <- svc.Status{State: svc.StartPending}
+	s <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
+
+	go m.monitorUSBDrives()
+
+	for {
+		select {
+		case c := <-r:
+			switch c.Cmd {
+			case svc.Interrogate:
+				s <- c.CurrentStatus
+			case svc.Stop, svc.Shutdown:
+				s <- svc.Status{State: svc.StopPending}
+				return false, 0
+			default:
+				log.Printf("unexpected control request #%d", c)
+			}
+		}
+	}
+}
+
+func (m *USBDriveService) monitorUSBDrives() {
+	query := "SELECT * FROM Win32_VolumeChangeEvent WHERE EventType = 2" // EventType 2 is for device arrival
+
+	for {
+		var dst []Win32_VolumeChangeEvent
+		err := wmi.Query(query, &dst)
+		if err != nil {
+			log.Printf("WMI query failed: %s", err)
+			time.Sleep(10 * time.Second)
+			continue
+		}
+
+		if len(dst) > 0 {
+			log.Println("USB drive connected.")
+			m.printMountedVolumes()
+		}
+
+		time.Sleep(10 * time.Second)
+	}
+}
+
+func (m *USBDriveService) printMountedVolumes() {
+	var volumes []Win32_LogicalDisk
+	err := wmi.Query("SELECT * FROM Win32_LogicalDisk WHERE DriveType = 2", &volumes) // DriveType 2 is for removable drives
+	if err != nil {
+		log.Printf("Failed to query logical disks: %s", err)
+		return
+	}
+
+	for _, volume := range volumes {
+		log.Printf("Volume: %s, FileSystem: %s, FreeSpace: %d, Size: %d", volume.DeviceID, volume.FileSystem, volume.FreeSpace, volume.Size)
+	}
+}
+
+type Win32_VolumeChangeEvent struct {
+	EventType uint16
+}
+
+type Win32_LogicalDisk struct {
+	DeviceID   string
+	FileSystem string
+	FreeSpace  uint64
+	Size       uint64
+}
+
+func main() {
+	isInteractive, err := svc.IsAnInteractiveSession()
+	if err != nil {
+		log.Fatalf("failed to determine if we are running in an interactive session: %v", err)
+	}
+
+	if isInteractive {
+		runService("USBDriveWatcherService", true)
+	} else {
+		runService("USBDriveWatcherService", false)
+	}
+}
+
+func runService(name string, isDebug bool) {
+	var err error
+	if isDebug {
+		err = debug.Run(name, &USBDriveService{})
+	} else {
+		err = svc.Run(name, &USBDriveService{})
+	}
+	if err != nil {
+		log.Fatalf("%s service failed: %v", name, err)
+	}
+}
