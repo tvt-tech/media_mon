@@ -23,32 +23,36 @@ usb-file-filter.exe
 Find Archer compatiple files signature in specified path 
 and archive founded unexpected files
 Will show popup to accept or decline action!
- ```powerhsell
+```powerhsell
 usb-file-filter.exe ./<dst>
 ```
 
 List USB drives
- ```powerhsell
+```powerhsell
 usb-file-filter.exe -l
 ```
 
 Eject drive by path 
- ```powerhsell
+```powerhsell
 usb-file-filter.exe -e E:
+```
 
 Eject all matched Archer devices
- ```powerhsell
+```powerhsell
 usb-file-filter.exe -e -A
+```
 
 Run as daemon
- ```powerhsell
+```powerhsell
 usb-file-filter.exe -s
+```
 
 Run as daemon with no tray icon
- ```powerhsell
+```powerhsell
 usb-file-filter.exe -s -q
+```
 
 Run in debug mode
- ```powerhsell
+```powerhsell
 usb-file-filter.exe -d ./<dst>
 ```
