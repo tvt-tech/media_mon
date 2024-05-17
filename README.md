@@ -40,6 +40,14 @@ Eject all matched Archer devices
  ```powerhsell
 usb-file-filter.exe -e -A
 
+Run as daemon
+ ```powerhsell
+usb-file-filter.exe -s
+
+Run as daemon with no tray icon
+ ```powerhsell
+usb-file-filter.exe -s -q
+
 Run in debug mode
  ```powerhsell
 usb-file-filter.exe -d ./<dst>
