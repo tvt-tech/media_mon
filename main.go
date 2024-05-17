@@ -18,6 +18,8 @@ func init() {
 func main() {
 	debug := flag.Bool("d", false, "Debug")
 	list := flag.Bool("l", false, "List devices")
+	as_service := flag.Bool("s", false, "Start service")
+	quiet := flag.Bool("q", false, "Quiet")
 	eject := flag.Bool("e", false, "Eject device")
 	eject_all := flag.Bool("A", false, "Eject all matched Archer devices")
 	flag.Parse()
@@ -25,6 +27,14 @@ func main() {
 	if *debug {
 		Logger.SetLevel(logrus.DebugLevel)
 		Logger.Debug("Debug mode")
+	}
+
+	if *as_service {
+		if !*quiet {
+			go utils.RunTray()
+		}
+		utils.StartService()
+		return
 	}
 
 	if *list {
