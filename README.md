@@ -3,26 +3,34 @@
 ### tool to find connected Archer devices and archive all data not matched to extensions patterns list 
 
 ### Build
+WINDOWS
 ```powershell
 git clone https://github.com/tvt-tech/usb-file-filter
 cd usb-file-filter
 $env:GOOS = "windows"
 $env:GOARCH = "386"
-go build -ldflags="-s -w" -trimpath
+go build -ldflags="-s -w" -trimpath -o arch_usb_mon_x32.exe
+```
+
+LINUX
+```bash
+git clone https://github.com/tvt-tech/usb-file-filter
+cd usb-file-filter
+GOOS=linux GOARCH=386 go build -ldflags="-s -w" -trimpath -o arch_usb_mon_386
 ```
 
 ### Usage
 
 Find Archer devices in usb storages 
 and archive founded unexpected files
-Will show popup to accept or decline action!
+> [!NOTE] Will show popup message on windows to accept or decline action!
 ```powerhsell
 usb-file-filter.exe 
 ```
 
 Find Archer compatiple files signature in specified path 
 and archive founded unexpected files
-Will show popup to accept or decline action!
+> [!NOTE] Will show popup message on windows to accept or decline action!
 ```powerhsell
 usb-file-filter.exe ./<dst>
 ```

@@ -26,7 +26,6 @@ func main() {
 	eject := flag.Bool("e", false, "Eject device")
 	eject_all := flag.Bool("A", false, "Eject all matched Archer devices")
 	flag.Parse()
-
 	if *debug {
 		Logger.SetLevel(logrus.DebugLevel)
 		Logger.Debug("Debug mode")

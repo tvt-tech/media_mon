@@ -1,17 +1,14 @@
 package utils
 
 import (
-	// "log"
-	// "os"
-	"syscall"
 	"time"
 )
 
 var connected_drives []string
 
-var (
-	beepFunc = syscall.MustLoadDLL("user32.dll").MustFindProc("MessageBeep")
-)
+// var (
+// 	beepFunc = syscall.MustLoadDLL("user32.dll").MustFindProc("MessageBeep")
+// )
 
 func upd_drives() {
 	if drives, err := Detect(); err != nil {
