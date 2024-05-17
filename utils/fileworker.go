@@ -129,7 +129,7 @@ func FindMatchedArcherDevice(drive string) bool {
 		Logger.Info(info)
 		return true
 	}
-	Logger.Debug("Device on %s not match Archer device\n", drive)
+	Logger.Debugf("Device on %s not match Archer device", drive)
 	return false
 }
 
@@ -187,10 +187,22 @@ func RenameNotAllowed(dirPath string) {
 	if is_match {
 		files := Walk(dirPath)
 
+		ret := false
+
 		for _, f := range files {
 			if !IsExtensionAllowed(f) {
-				if RenameFile(f, f+".bak") == nil {
-					Logger.Info(fmt.Sprintf("Renamed: %s to %s", f, f+".bak"))
+				ret = PopupDoRename(dirPath, files)
+				if ret {
+					break
+				}
+			}
+		}
+		if ret {
+			for _, f := range files {
+				if !IsExtensionAllowed(f) {
+					if RenameFile(f, f+".bak") == nil {
+						Logger.Infof("Renamed: %s to %s", f, f+".bak")
+					}
 				}
 			}
 		}

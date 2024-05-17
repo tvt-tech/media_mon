@@ -1,9 +1,10 @@
 package main
 
 import (
-	"archer_anticheat/utils"
 	"flag"
 	"os"
+
+	"github.com/tvt-tech/usb-file-filter/utils"
 
 	"github.com/sirupsen/logrus"
 )
@@ -26,7 +27,10 @@ func main() {
 
 	if *list {
 		utils.PrintDrives()
-	} else if directory := flag.Arg(0); directory != "" {
+		return
+	}
+
+	if directory := flag.Arg(0); directory != "" {
 		info, err := os.Stat(directory)
 		if err == nil {
 			if info.IsDir() {

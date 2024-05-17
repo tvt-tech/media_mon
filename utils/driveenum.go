@@ -3,7 +3,6 @@ package utils
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -43,29 +42,30 @@ func Detect() ([]string, error) {
 	return drives, nil
 }
 
-func isUSBStorage(device string) bool {
-	deviceVerifier := "ID_USB_DRIVER=usb-storage"
-	cmd := "udevadm"
-	args := []string{"info", "-q", "property", "-n", device}
-	out, err := exec.Command(cmd, args...).Output()
+/* OPTIONAL INTERNAL USE */
+// func isUSBStorage(device string) bool {
+// 	deviceVerifier := "ID_USB_DRIVER=usb-storage"
+// 	cmd := "udevadm"
+// 	args := []string{"info", "-q", "property", "-n", device}
+// 	out, err := exec.Command(cmd, args...).Output()
 
-	if err != nil {
-		Logger.Error(fmt.Sprintf("Error checking device %s: %s", device, err))
-		return false
-	}
+// 	if err != nil {
+// 		Logger.Errorf("Error checking device %s: %s", device, err)
+// 		return false
+// 	}
 
-	if strings.Contains(string(out), deviceVerifier) {
-		return true
-	}
+// 	if strings.Contains(string(out), deviceVerifier) {
+// 		return true
+// 	}
 
-	return false
-}
+// 	return false
+// }
 
 func PrintDrives() {
 	if drives, err := Detect(); err == nil {
-		Logger.Info(fmt.Sprintf("%d USB Devices Found", len(drives)))
+		Logger.Infof("%d USB Devices Found", len(drives))
 		for i, d := range drives {
-			Logger.Info(fmt.Sprintf("%d: %s", i, d))
+			Logger.Infof("%d: %s", i, d)
 		}
 	} else {
 		Logger.Error(err)
