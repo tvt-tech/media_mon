@@ -34,7 +34,9 @@ func main() {
 		info, err := os.Stat(directory)
 		if err == nil {
 			if info.IsDir() {
-				utils.RenameNotAllowed(directory)
+				if err := utils.ArchiveNotAllowed(directory); err != nil {
+					Logger.Error(err)
+				}
 			}
 		} else {
 			Logger.Error("Wrong path")
@@ -45,7 +47,9 @@ func main() {
 		}
 		if drives, err := utils.Detect(); err == nil {
 			for _, drive := range drives {
-				utils.RenameNotAllowed(drive)
+				if err := utils.ArchiveNotAllowed(drive); err != nil {
+					Logger.Error(err)
+				}
 			}
 		}
 	}

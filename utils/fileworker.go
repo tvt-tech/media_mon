@@ -4,12 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
 )
 
 var allowedExtensions = []string{
+	".zip",
 	".bak",
 	".bmp",
 	".a7p",
@@ -184,7 +186,6 @@ func RenameFile(oldPath, newPath string) error {
 func RenameNotAllowed(dirPath string) {
 
 	is_match := FindMatchedArcherDevice(dirPath)
-	fmt.Println(is_match)
 	if is_match {
 		files := Walk(dirPath)
 
@@ -193,9 +194,6 @@ func RenameNotAllowed(dirPath string) {
 		for _, f := range files {
 			if !IsExtensionAllowed(f) {
 				ret = PopupDoRename(dirPath, files)
-				if ret {
-					break
-				}
 			}
 		}
 		if ret {
@@ -209,4 +207,28 @@ func RenameNotAllowed(dirPath string) {
 		}
 	}
 
+}
+
+// Rename not allowed files in path
+func ArchiveNotAllowed(dirPath string) error {
+
+	is_match := FindMatchedArcherDevice(dirPath)
+	if is_match {
+		files := Walk(dirPath)
+
+		for _, f := range files {
+			if !IsExtensionAllowed(f) {
+				if PopupDoArchive(dirPath, files) {
+					return ArchiveFiles(
+						dirPath,
+						path.Join(dirPath, "unexpected.zip"),
+						IsExtensionAllowed,
+						true,
+					)
+				}
+				break
+			}
+		}
+	}
+	return nil
 }
