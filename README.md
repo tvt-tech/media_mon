@@ -13,12 +13,16 @@ go build -ldflags="-s -w" -trimpath
 
 ### Usage
 
-Find Archer devices in usb storages and archive founded unexpected files
+Find Archer devices in usb storages 
+and archive founded unexpected files
+Will show popup to accept or decline action!
 ```powerhsell
 usb-file-filter.exe 
 ```
 
-Find Archer compatiple files signature in specified path
+Find Archer compatiple files signature in specified path 
+and archive founded unexpected files
+Will show popup to accept or decline action!
  ```powerhsell
 usb-file-filter.exe ./<dst>
 ```
@@ -28,10 +32,13 @@ List USB drives
 usb-file-filter.exe -l
 ```
 
-
 Eject drive by path 
  ```powerhsell
 usb-file-filter.exe -e E:
+
+Eject all matched Archer devices
+ ```powerhsell
+usb-file-filter.exe -e -A
 
 Run in debug mode
  ```powerhsell
