@@ -3,7 +3,7 @@
 ### tool to find connected Archer devices and archive all data not matched to extensions patterns list 
 
 ### Build
-WINDOWS
+WINDOWS x32/amd64
 ```powershell
 git clone https://github.com/tvt-tech/usb-file-filter
 cd usb-file-filter
@@ -16,7 +16,14 @@ LINUX
 ```bash
 git clone https://github.com/tvt-tech/usb-file-filter
 cd usb-file-filter
-GOOS=linux GOARCH=386 go build -ldflags="-s -w" -trimpath -o arch_usb_mon_386
+GOOS=linux go build -ldflags="-s -w" -trimpath -o arch_usb_mon
+```
+
+MIPSLE
+```bash
+git clone https://github.com/tvt-tech/usb-file-filter
+cd usb-file-filter
+GOOS=linux GOARCH=mipsle CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o arch_usb_mon_mipsle
 ```
 
 ### Usage

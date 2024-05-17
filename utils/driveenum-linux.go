@@ -19,7 +19,7 @@ import (
 func Detect() ([]string, error) {
 	var drives []string
 	driveMap := make(map[string]bool)
-	dfPattern := regexp.MustCompile("^(\\/[^ ]+)[^%]+%[ ]+(.+)$")
+	dfPattern := regexp.MustCompile(`^(\\/[^ ]+)[^%]+%[ ]+(.+)$`)
 
 	cmd := "df"
 	out, err := exec.Command(cmd).Output()

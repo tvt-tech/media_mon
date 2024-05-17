@@ -1,10 +1,12 @@
+//go:build !mipsle
+// +build !mipsle
+
 package utils
 
 import (
 	// "log"
 	// "os"
 
-	"io/ioutil"
 	"os"
 	"os/exec"
 
@@ -32,22 +34,13 @@ func onReady() {
 	}()
 }
 
-func getIconBytes() []byte {
-	// Read the file into a []byte slice
-	bytes, err := ioutil.ReadFile("icon.png")
-	if err != nil {
-		return nil
-	}
-	return bytes
-}
-
 func onRestart() {
 	Logger.Debugf("Restarting...")
 
 	// Get the path to the current executable
 	executable, err := os.Executable()
 	if err != nil {
-		Logger.Errorf("Error getting executable path:", err)
+		Logger.Error("Error getting executable path:", err)
 		return
 	}
 
@@ -60,7 +53,7 @@ func onRestart() {
 	// Start the new process
 	err = cmd.Start()
 	if err != nil {
-		Logger.Errorf("Error restarting application:", err)
+		Logger.Error("Error restarting application:", err)
 	} else {
 		systray.Quit()
 	}

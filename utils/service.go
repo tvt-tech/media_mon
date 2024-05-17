@@ -6,10 +6,6 @@ import (
 
 var connected_drives []string
 
-// var (
-// 	beepFunc = syscall.MustLoadDLL("user32.dll").MustFindProc("MessageBeep")
-// )
-
 func upd_drives() {
 	if drives, err := Detect(); err != nil {
 		upd_drives()
@@ -19,14 +15,7 @@ func upd_drives() {
 }
 
 func init() {
-	// logFile, err := os.OpenFile("C:\\archer_usb_service.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	// if err != nil {
-	// 	log.Fatalf("Failed to open log file: %v", err)
-	// }
-	// log.SetOutput(logFile)
-
 	upd_drives()
-
 }
 
 func isInList(search string, list []string) bool {
@@ -44,12 +33,10 @@ func update() {
 	copy(prev_drives, connected_drives)
 
 	upd_drives()
-	if connected_drives != nil {
-		for _, new_drive := range connected_drives {
-			if !isInList(new_drive, prev_drives) {
-				Logger.Infof("New connected: %s", new_drive)
-				go runArchiveInRoutine(new_drive)
-			}
+	for _, new_drive := range connected_drives {
+		if !isInList(new_drive, prev_drives) {
+			Logger.Infof("New connected: %s", new_drive)
+			go runArchiveInRoutine(new_drive)
 		}
 	}
 }
