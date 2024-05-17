@@ -183,8 +183,6 @@ func RenameFile(oldPath, newPath string) error {
 // Rename not allowed files in path
 func RenameNotAllowed(dirPath string) {
 
-	// Lock(dirPath)
-
 	is_match := FindMatchedArcherDevice(dirPath)
 	fmt.Println(is_match)
 	if is_match {
@@ -211,5 +209,4 @@ func RenameNotAllowed(dirPath string) {
 		}
 	}
 
-	// Unlock(dirPath)
 }
