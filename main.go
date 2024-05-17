@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/tvt-tech/usb-file-filter/utils"
@@ -19,6 +20,7 @@ func main() {
 	debug := flag.Bool("d", false, "Debug")
 	list := flag.Bool("l", false, "List devices")
 	eject := flag.Bool("e", false, "Eject device")
+	eject_all := flag.Bool("A", false, "Eject all")
 	flag.Parse()
 
 	if *debug {
@@ -36,6 +38,12 @@ func main() {
 			err := utils.EjectDrive(directory)
 			if err != nil {
 				Logger.Error(err)
+			}
+		} else if *eject_all {
+			if drives, err := utils.Detect(); err == nil {
+				for _, drive := range drives {
+					fmt.Println(drive)
+				}
 			}
 		}
 		return
