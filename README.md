@@ -5,25 +5,25 @@
 ### Build
 WINDOWS x32/amd64
 ```powershell
-git clone https://github.com/tvt-tech/usb-file-filter
+git clone https://github.com/tvt-tech/archer_media_mon
 cd usb-file-filter
 $env:GOOS = "windows"
 $env:GOARCH = "386"
-go build -ldflags="-s -w" -trimpath -o arch_usb_mon_x32.exe
+go build -ldflags="-s -w" -trimpath -o media_mon_x32.exe
 ```
 
 LINUX
 ```bash
 git clone https://github.com/tvt-tech/usb-file-filter
 cd usb-file-filter
-GOOS=linux go build -ldflags="-s -w" -trimpath -o arch_usb_mon
+GOOS=linux go build -ldflags="-s -w" -trimpath -o media_mon
 ```
 
 MIPSLE
 ```bash
 git clone https://github.com/tvt-tech/usb-file-filter
 cd usb-file-filter
-GOOS=linux GOARCH=mipsle CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o arch_usb_mon_mipsle
+GOOS=linux GOARCH=mipsle CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o media_mon
 ```
 
 ### Usage
@@ -38,36 +38,36 @@ usb-file-filter.exe
 Find Archer compatiple files signature in specified path 
 and archive founded unexpected files
 > [!NOTE] Will show popup message on windows to accept or decline action!
-```powerhsell
-usb-file-filter.exe ./<dst>
+```bash
+./media_mon ./<dst>
 ```
 
 List USB drives
-```powerhsell
-usb-file-filter.exe -l
+```bash
+./media_mon -l
 ```
 
 Eject drive by path 
-```powerhsell
-usb-file-filter.exe -e E:
+```bash
+./media_mon -e <drive path / drive letter>
 ```
 
 Eject all matched Archer devices
-```powerhsell
-usb-file-filter.exe -e -A
+```bash
+./media_mon -e -A
 ```
 
-Run as daemon
-```powerhsell
-usb-file-filter.exe -s
+Run in monitor mode
+```bash
+./media_mon -s
 ```
 
-Run as daemon with no tray icon
-```powerhsell
-usb-file-filter.exe -s -q
+Run in monitor mode with no tray icon
+```bash
+./media_mon -s -q
 ```
 
 Run in debug mode
-```powerhsell
-usb-file-filter.exe -d ./<dst>
+```bash
+./media_mon -d ./<dst>
 ```

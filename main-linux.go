@@ -7,7 +7,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/tvt-tech/usb-file-filter/utils"
+	"github.com/tvt-tech/media_mon/utils"
 
 	"github.com/sirupsen/logrus"
 )

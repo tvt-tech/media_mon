@@ -1,4 +1,4 @@
-module github.com/tvt-tech/usb-file-filter
+module github.com/tvt-tech/media_mon
 
 go 1.19
 

@@ -14,6 +14,7 @@ import (
 )
 
 var allowedExtensions = []string{
+	"",
 	".zip",
 	".bak",
 	".bmp",
