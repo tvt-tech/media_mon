@@ -6,61 +6,61 @@ on:
 
   workflow_dispatch:
 
-  permissions:
-    contents: read
+permissions:
+  contents: read
 
-  jobs:
-    build-mipsle:
-      runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-      strategy:
-        fail-fast: false
-        matrix:
-          build_group:
-            - name: "Build Linux"
-              os: "linux"
-              command: "GOOS=linux go build -ldflags='-s -w' -trimpath -o build/media_mon-linux"
-            - name: "Build Windows 32-bit"
-              os: "windows"
-              command: "GOOS=windows GOARCH=386 go build -ldflags='-s -w' -trimpath -o build/media_mon_win32.exe"
-            - name: "Build Linux MIPSLE"
-              os: "linux"
-              command: "GOOS=linux GOARCH=mipsle CGO_ENABLED=0 go build -ldflags='-s -w' -trimpath -o build/media_mon-mipsle"
+    strategy:
+      fail-fast: false
+      matrix:
+        build_group:
+          - name: "Build Linux"
+            os: "linux"
+            command: "GOOS=linux go build -ldflags='-s -w' -trimpath -o build/media_mon-linux"
+          - name: "Build Windows 32-bit"
+            os: "windows"
+            command: "GOOS=windows GOARCH=386 go build -ldflags='-s -w' -trimpath -o build/media_mon_win32.exe"
+          - name: "Build Linux MIPSLE"
+            os: "linux"
+            command: "GOOS=linux GOARCH=mipsle CGO_ENABLED=0 go build -ldflags='-s -w' -trimpath -o build/media_mon-mipsle"
 
 
-      steps: 
-      - uses: actions/checkout@v4
+    steps: 
+    - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.20'
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
 
-      - name: Cache Go modules
-        id: cache-modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
+    - name: Cache Go modules
+      id: cache-modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
 
-      - name: Install dependencies
-        run: |
-          go mod download
+    - name: Install dependencies
+      run: |
+        go mod download
 
-      - name: Build
-        run: |
-          ${{ matrix.build_group.command }}
+    - name: Build
+      run: |
+        ${{ matrix.build_group.command }}
 
-      # - name: Run tests
-      #   run: |
-      #     go test -v ./...
+    # - name: Run tests
+    #   run: |
+    #     go test -v ./...
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: build/
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: build/
